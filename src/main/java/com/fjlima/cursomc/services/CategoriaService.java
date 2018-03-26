@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.fjlima.cursomc.domain.Categoria;
+import com.fjlima.cursomc.dto.CategoriaDTO;
 import com.fjlima.cursomc.repository.CategoriaRepository;
 import com.fjlima.cursomc.services.exceptions.DataIntegrityException;
 import com.fjlima.cursomc.services.exceptions.ObjectNotFoundException;
@@ -34,6 +35,10 @@ public class CategoriaService {
 		Optional<Categoria> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
+	}
+
+	public Categoria fromDTO(CategoriaDTO objDTO) {
+		return new Categoria(objDTO.getId(), objDTO.getNome());
 	}
 
 	public Categoria insert(Categoria obj) {

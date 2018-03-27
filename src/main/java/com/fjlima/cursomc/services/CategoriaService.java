@@ -22,6 +22,12 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repo;
 
+	public Categoria find(Integer id) {
+		Optional<Categoria> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
+	}
+
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
@@ -29,12 +35,6 @@ public class CategoriaService {
 
 	public List<Categoria> findAll() {
 		return repo.findAll();
-	}
-
-	public Categoria find(Integer id) {
-		Optional<Categoria> obj = repo.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 
 	public Categoria fromDTO(CategoriaDTO objDTO) {
@@ -52,9 +52,8 @@ public class CategoriaService {
 	}
 
 	public void delete(Integer id) {
-		Categoria obj = find(id);
 		try {
-			repo.delete(obj);
+			repo.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir uma categoria que possui Produtos.");
 		}

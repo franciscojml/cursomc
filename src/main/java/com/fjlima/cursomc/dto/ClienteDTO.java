@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.fjlima.cursomc.domain.Cliente;
+import com.fjlima.cursomc.services.validation.ClienteUpdate;
 
+@ClienteUpdate
 public class ClienteDTO implements Serializable {
 
 	private Integer id;
@@ -18,7 +20,7 @@ public class ClienteDTO implements Serializable {
 	private String nome;
 
 	@NotEmpty(message = "Preenchimento obrigatório")
-	@Email(message="Email inválido")
+	@Email(message = "Email inválido")
 	private String email;
 
 	public ClienteDTO() {

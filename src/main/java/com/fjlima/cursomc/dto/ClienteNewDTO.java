@@ -4,9 +4,13 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fjlima.cursomc.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable {
 
 	@NotEmpty(message = "Preenchimento obrigatório")
@@ -20,7 +24,7 @@ public class ClienteNewDTO implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String cpfOuCnpj;
 
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotNull(message = "Preenchimento obrigatório")
 	private Integer tipo;
 
 	@NotEmpty(message = "Preenchimento obrigatório")
@@ -44,7 +48,7 @@ public class ClienteNewDTO implements Serializable {
 
 	private String telefone3;
 
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotNull(message = "Preenchimento obrigatório")
 	private Integer cidadeId;
 
 	public ClienteNewDTO() {

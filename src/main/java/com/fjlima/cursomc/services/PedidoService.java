@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,8 @@ import com.fjlima.cursomc.repository.ItemPedidoRepository;
 import com.fjlima.cursomc.repository.PagamentoRepository;
 import com.fjlima.cursomc.repository.PedidoRepository;
 import com.fjlima.cursomc.repository.ProdutoRepository;
+import com.fjlima.cursomc.security.UserSS;
+import com.fjlima.cursomc.services.exceptions.AuthorizationException;
 import com.fjlima.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -49,6 +54,18 @@ public class PedidoService {
 		Optional<Pedido> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+	}
+
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+
+		if (user == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.find(user.getId());
+		return repo.findByCliente(cliente, pageRequest);
 	}
 
 	@Transactional
